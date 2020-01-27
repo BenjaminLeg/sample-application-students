@@ -13,3 +13,8 @@ services:
 
 script:
   - mvn clean verify
+  - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+  - docker build -t benjaminlegrosperso/application-students-test-db-changelog-job:latest sample-application-db-changelog-job
+  - docker build -t benjaminlegrosperso/application-students-test-http-api-server:latest sample-application-http-api-server
+  - docker push benjaminlegrosperso/application-students-test-db-changelog-job:latest
+  - docker push benjaminlegrosperso/application-students-test-http-api-server:latest
