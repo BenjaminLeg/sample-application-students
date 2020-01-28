@@ -16,12 +16,21 @@ addons:
 # Define the services to use
 services:
   - docker
+#
+#jobs:
+#  - stage: "Build"
+#    name: "Build tests and Quality Gate"
+#    script:
+#      - |
+#              mvn clean verify sonar:sonar \
+#              -Dsonar.projectKey=BenjaminLeg_sample-application-students \
+#              -Dsonar.host.url=https://sonarcloud.io \
+#              -Dsonar.login=$SONAR_TOKEN
 
 script:
   - |
-    mvn clean verify sonar:sonar \
+    mvn clean install sonar:sonar \
     -Dsonar.projectKey=BenjaminLeg_sample-application-students \
-    -Dsonar.organization=LEGROS Benjamin \
     -Dsonar.host.url=https://sonarcloud.io \
     -Dsonar.login=$SONAR_TOKEN
 
