@@ -16,26 +16,17 @@ addons:
 # Define the services to use
 services:
   - docker
-#
-#jobs:
-#  - stage: "Build"
-#    name: "Build tests and Quality Gate"
-#    script:
-#      - |
-#              mvn clean verify sonar:sonar \
-#              -Dsonar.projectKey=BenjaminLeg_sample-application-students \
-#              -Dsonar.host.url=https://sonarcloud.io \
-#              -Dsonar.login=$SONAR_TOKEN
 
-script:
-  - |
-    mvn clean install sonar:sonar \
-    -Dsonar.projectKey=BenjaminLeg_sample-application-students \
-    -Dsonar.host.url=https://sonarcloud.io \
-    -Dsonar.login=$SONAR_TOKEN
-
-  - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-  - docker build -t benjaminlegrosperso/application-students-test-db-changelog-job:latest sample-application-db-changelog-job
-  - docker build -t benjaminlegrosperso/application-students-test-http-api-server:latest sample-application-http-api-server
-  - docker push benjaminlegrosperso/application-students-test-db-changelog-job:latest
-  - docker push benjaminlegrosperso/application-students-test-http-api-server:latest
+jobs:
+  include:
+    - stage: build
+      name: "Build tests and Quality Gate"
+      script: 'mvn clean verify sonar:sonar -Dsonar.projectKey=BenjaminLeg_sample-application-students'
+    - stage: publish
+      name: "Build and publish images"
+      script:
+        - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+        - docker build -t benjaminlegrosperso/application-students-test-db-changelog-job:latest sample-application-db-changelog-job
+        - docker build -t benjaminlegrosperso/application-students-test-http-api-server:latest sample-application-http-api-server
+        - docker push benjaminlegrosperso/application-students-test-db-changelog-job:latest
+        - docker push benjaminlegrosperso/application-students-test-http-api-server:latest
