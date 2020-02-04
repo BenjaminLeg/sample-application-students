@@ -54,6 +54,7 @@
         </dependencies>
     </dependencyManagement>
 
+
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
